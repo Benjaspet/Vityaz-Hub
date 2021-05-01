@@ -29,6 +29,7 @@ use pocketmine\event\inventory\CraftItemEvent;
 use pocketmine\event\inventory\FurnaceSmeltEvent;
 use pocketmine\event\inventory\InventoryTransactionEvent;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerDropItemEvent;
 use pocketmine\event\player\PlayerExhaustEvent;
@@ -97,9 +98,18 @@ class BaseListener implements Listener {
                     $event->setCancelled(true);
                     break;
                 case EntityDamageByEntityEvent::CAUSE_VOID:
+                    $event->setCancelled(true);
                     $this->teleportToHub($entity);
                     break;
             }
+        }
+    }
+
+    public function onChat(PlayerChatEvent $event) {
+        $player = $event->getPlayer();
+        $message = $event->getMessage();
+        if ($player instanceof Player) {
+            $event->setFormat("§c" . $player->getName() . ":§f " . $message);
         }
     }
 

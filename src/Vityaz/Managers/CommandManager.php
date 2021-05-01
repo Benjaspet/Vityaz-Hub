@@ -37,5 +37,10 @@ class CommandManager {
         $map->unregister($map->getCommand("ban"));
         $map->unregister($map->getCommand("banlist"));
         $map->unregister($map->getCommand("ban-ip"));
+        $map->unregister($map->getCommand("gamerule"));
+        $map->unregister($map->getCommand("multiworld"));
+        $map->unregister($map->getCommand("help"));
+        $map->unregister($map->getCommand("checkperm"));
+
     }
 }
