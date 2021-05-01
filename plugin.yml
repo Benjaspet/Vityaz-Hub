@@ -1,0 +1,6 @@
+name: Vityaz-Hub
+author: EerieAlchemist
+api: 3.19.0
+version: 1.0.0
+main: Vityaz\Main
+description: "The hub core for Vityaz Practice."
