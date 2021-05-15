@@ -28,7 +28,7 @@ class FormUtil {
                     $player->transfer("45.134.8.234", 19133);
                     break;
                 case 1;
-                    $player->sendMessage("");
+                    $player->transfer("51.161.145.193", 19261);
                     break;
                 case 2;
                     $player->transfer("45.134.8.234", 19134);
@@ -39,8 +39,8 @@ class FormUtil {
         $form->setTitle("§l§8TRANSFER FORM");
         $form->setContent("Transfer to a region below:");
         $form->addButton("§8NA Practice\n§r§8" . $this->core->getVityazManager()->getQueryUtil()->getNaPracticeCount(false) . "/25");
-        $form->addButton("§8EU Practice\n§r§8" . "offline" . "/25");
-        $form->addButton("§8NA UHCs\n" . $this->core->getVityazManager()->getQueryUtil()->getUhcPlayerCount(false) . "/25");
+        $form->addButton("§8AS Practice\n§r§8" . $this->core->getVityazManager()->getQueryUtil()->getAsPracticeCount(false) . "/25");
+        $form->addButton("§8UHC Meetup\n" . $this->core->getVityazManager()->getQueryUtil()->getUhcPlayerCount(false) . "/25");
         $player->sendForm($form);
         return $form;
     }

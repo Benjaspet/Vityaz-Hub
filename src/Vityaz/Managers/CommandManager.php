@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Vityaz\Managers;
 
+use Valiant\Command\FlyCMD;
 use Vityaz\Commands\PingCMD;
 use Vityaz\Main;
 
@@ -16,6 +17,7 @@ class CommandManager {
         $this->core = $core;
         $map = $this->core->getServer()->getCommandMap();
         $map->register("ping", new PingCMD($this->core));
+        $map->register("fly", new FlyCMD($this->core));
 
         $map->unregister($map->getCommand("me"));
         $map->unregister($map->getCommand("w"));
@@ -40,6 +42,15 @@ class CommandManager {
         $map->unregister($map->getCommand("gamerule"));
         $map->unregister($map->getCommand("multiworld"));
         $map->unregister($map->getCommand("checkperm"));
+        $map->unregister($map->getCommand("unban"));
+        $map->unregister($map->getCommand("teleport"));
+        $map->unregister($map->getCommand("makeplugin"));
+        $map->unregister($map->getCommand("genplugin"));
+        $map->unregister($map->getCommand("give"));
+        $map->unregister($map->getCommand("pardon-ip"));
+        $map->unregister($map->getCommand("difficulty"));
+        $map->unregister($map->getCommand("extractplugin"));
+        $map->unregister($map->getCommand("timings"));
 
     }
 }

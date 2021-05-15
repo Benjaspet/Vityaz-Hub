@@ -32,6 +32,19 @@ class QueryUtil {
         }
     }
 
+    public function getAsPracticeCount(bool $bool) {
+        try {
+            $query = NetQuery::query("51.161.145.193", 19261);
+            return (int) $query['Players'];
+        } catch (NetQueryException $exception) {
+            if ($bool === true) {
+                return 0;
+            } else {
+                return "offline";
+            }
+        }
+    }
+
     public function getUhcPlayerCount(bool $bool) {
         try {
             $query = NetQuery::query("45.134.8.234", 19134);
@@ -50,6 +63,6 @@ class QueryUtil {
     }
 
     public function getTotalNetworkCount(): int {
-        return $this->getNaPracticeCount(true) + $this->getUhcPlayerCount(true) + $this->getHubPlayerCount();
+        return $this->getNaPracticeCount(true) + $this->getUhcPlayerCount(true) + $this->getAsPracticeCount(true) + $this->getHubPlayerCount();
     }
 }
