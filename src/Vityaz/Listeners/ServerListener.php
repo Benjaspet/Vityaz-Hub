@@ -21,8 +21,10 @@ class ServerListener implements Listener {
     }
 
     public function onQueryRegenerate(QueryRegenerateEvent $event): void {
-        $total = $this->count + $this->core->getVityazManager()->getQueryUtil()->getHubPlayerCount();
-        $event->setPlayerCount($this->core->getVityazManager()->getQueryUtil()->getTotalNetworkCount());
+        $cachedCount = $this->core->getVityazManager()->getPlayerCountManager()->getCachedPlayers();
+        $hubCount = $this->core->getVityazManager()->getQueryUtil()->getHubCountAsInteger();
+        $total = $cachedCount + $hubCount;
+        $event->setPlayerCount($total);
         $event->setMaxPlayerCount(100);
     }
 

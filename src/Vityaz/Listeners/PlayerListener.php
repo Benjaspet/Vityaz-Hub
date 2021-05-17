@@ -39,12 +39,11 @@ use pocketmine\event\plugin\PluginDisableEvent;
 use pocketmine\event\server\DataPacketSendEvent;
 use pocketmine\item\Bed;
 use pocketmine\item\Item;
-use pocketmine\level\Position;
 use pocketmine\network\mcpe\protocol\DisconnectPacket;
 use pocketmine\Player;
 use Vityaz\Main;
 
-class BaseListener implements Listener {
+class PlayerListener implements Listener {
 
     private $core;
 
@@ -99,7 +98,7 @@ class BaseListener implements Listener {
                     break;
                 case EntityDamageByEntityEvent::CAUSE_VOID:
                     $event->setCancelled(true);
-                    $this->teleportToHub($entity);
+                    $this->core->getVityazManager()->getPlayerUtil()->teleportToHub($entity);
                     break;
             }
         }
@@ -117,7 +116,7 @@ class BaseListener implements Listener {
         $event->setCancelled();
     }
 
-    public function nullInteract(PlayerInteractEvent $event) {
+    public function onInteract(PlayerInteractEvent $event) {
         $player = $event->getPlayer();
         $b = $event->getBlock();
         $i = $event->getItem();
@@ -159,33 +158,9 @@ class BaseListener implements Listener {
 
     public function onJoin(PlayerJoinEvent $event) {
         $player = $event->getPlayer();
-        $player->setGamemode(2);
-        $player->setFood(20);
-        $player->setXpProgress(0);
-        $player->setHealth(20);
-        $player->setXpLevel(0);
-        $player->getInventory()->clearAll();
-        $player->getArmorInventory()->clearAll();
-        $player->removeAllEffects();
-        $player->setFood(20);
+        $this->core->getVityazManager()->getPlayerUtil()->initPlayerJoin($player);
         $event->setJoinMessage("§8[§2+§8] §a" . $player->getName());
-        $player->sendMessage("§aWelcome to the Vityaz Network, " . $player->getName() . "!");
-        $player->sendTitle("§l§cVityaz", "§7Network", 10, 30, 10);
-        $this->teleportToHub($player);
-        $this->giveHubItem($player);
-        $this->core->getVityazManager()->getScoreboardUtil()->setHubScoreboard($player);
-    }
 
-    public function giveHubItem(Player $player) {
-        $item = Item::get(Item::COMPASS);
-        $item->setCustomName("§r§l§cTransfer");
-        $player->getInventory()->setItem(4, $item);
-    }
-
-    public function teleportToHub(Player $player) {
-        $lobby = $this->core->getServer()->getLevelByName("Hub");
-        $pos = new Position(282.5, 74.5, 284.5, $lobby);
-        $player->teleport($pos);
     }
 
     public function handleCompassItem(PlayerInteractEvent $event) {

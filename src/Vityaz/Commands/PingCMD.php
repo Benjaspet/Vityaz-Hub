@@ -15,8 +15,10 @@ class PingCMD extends PluginCommand {
 
     public function __construct(Main $core){
         parent::__construct("ping", $core);
-        $this->core = $core;
+        $this->setPermission("vityaz.ping");
+        $this->setPermissionMessage("§cYou cannot execute this command.");
         $this->setAliases(["ms"]);
+        $this->core = $core;
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args): bool {
@@ -28,12 +30,12 @@ class PingCMD extends PluginCommand {
 
         if (!$sender instanceof Player) {
             $sender->sendMessage("§cRun this command as a player.");
-            return true;
+            return false;
         }
 
         if (isset($args[0]) and $target = $this->core->getServer()->getPlayer($args[0]) === null) {
             $sender->sendMessage("§cPlayer not found.");
-            return true;
+            return false;
         }
 
         $target = $this->core->getServer()->getPlayer($args[0]);

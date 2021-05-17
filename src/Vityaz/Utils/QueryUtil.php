@@ -16,53 +16,40 @@ class QueryUtil {
         $this->core = $core;
     }
 
-    # Use a true boolean parameter to return as an int if offline, false to
-    # return as a string "offline".
-
-    public function getNaPracticeCount(bool $bool) {
-        try {
-            $query = NetQuery::query("45.134.8.234", 19133);
-            return (int) $query['Players'];
-        } catch (NetQueryException $exception) {
-            if ($bool === true) {
-                return 0;
-            } else {
-                return "offline";
-            }
-        }
-    }
-
-    public function getAsPracticeCount(bool $bool) {
-        try {
-            $query = NetQuery::query("51.161.145.193", 19261);
-            return (int) $query['Players'];
-        } catch (NetQueryException $exception) {
-            if ($bool === true) {
-                return 0;
-            } else {
-                return "offline";
-            }
-        }
-    }
-
-    public function getUhcPlayerCount(bool $bool) {
-        try {
-            $query = NetQuery::query("45.134.8.234", 19134);
-            return (int) $query['Players'];
-        } catch (NetQueryException $exception) {
-            if ($bool === true) {
-                return 0;
-            } else {
-                return "offline";
-            }
-        }
-    }
-
-    public function getHubPlayerCount(): int {
-        return count($this->core->getServer()->getOnlinePlayers());
-    }
-
     public function getTotalNetworkCount(): int {
-        return $this->getNaPracticeCount(true) + $this->getUhcPlayerCount(true) + $this->getAsPracticeCount(true) + $this->getHubPlayerCount();
+        $na = $this->getNaPracticeCountAsInteger();
+        $eu = $this->getEuPracticeCountAsInteger();
+        $as = $this->getAsPracticeCountAsInteger();
+        $hub = $this->getHubCountAsInteger();
+        $uhc = $this->getUhcCountAsInteger();
+        return $na + $eu + $as + $hub + $uhc;
+    }
+
+    public function getNaPracticeCountAsInteger(): int {
+        $na = $this->core->getVityazManager()->getPlayerCountManager()->count["NA"];
+        if ($na === "Offline") return 0;
+        return $na;
+    }
+
+    public function getEuPracticeCountAsInteger(): int {
+        $eu = $this->core->getVityazManager()->getPlayerCountManager()->count["EU"];
+        if ($eu === "Offline") return 0;
+        return $eu;
+    }
+
+    public function getAsPracticeCountAsInteger(): int {
+        $as = $this->core->getVityazManager()->getPlayerCountManager()->count["AS"];
+        if ($as === "Offline") return 0;
+        return $as;
+    }
+
+    public function getUhcCountAsInteger(): int {
+        $uhc = $this->core->getVityazManager()->getPlayerCountManager()->count["UHC"];
+        if ($uhc === "Offline") return 0;
+        return $uhc;
+    }
+
+    public function getHubCountAsInteger(): int {
+        return count($this->core->getServer()->getOnlinePlayers());
     }
 }

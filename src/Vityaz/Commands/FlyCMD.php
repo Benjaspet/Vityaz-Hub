@@ -11,18 +11,21 @@ use Vityaz\Main;
 
 class FlyCMD extends PluginCommand {
 
-    private $plugin;
+    private $core;
 
-    public function __construct(Main $plugin){
-        parent::__construct("fly", $plugin);
-        $this->plugin=$plugin;
-        $this->setPermission("valiant.fly");
+    public function __construct(Main $core){
+        parent::__construct("fly", $core);
+        $this->setPermission("vityaz.fly");
+        $this->setPermissionMessage("§cYou cannot execute this command.");
+        $this->setAliases([]);
+        $this->core = $core;
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args): bool {
 
-        if (!$sender->hasPermission("vityaz.fly")){
-            $sender->sendMessage("§cYou cannot execute this command.");
+
+        if (!$this->testPermission($sender)) {
+            $sender->sendMessage($this->getPermissionMessage());
             return false;
         }
 

@@ -7,7 +7,7 @@ namespace Vityaz\Task;
 use pocketmine\scheduler\Task;
 use Vityaz\Main;
 
-class TimerTask extends Task {
+class ScoreboardTask extends Task {
 
     private $core;
 

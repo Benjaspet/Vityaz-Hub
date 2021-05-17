@@ -16,34 +16,85 @@ class FormUtil {
         $this->core = $core;
     }
 
-    public function transferForm(Player $player): SimpleForm {
-        $form = new SimpleForm (function (Player $event, $data) {
+    public function homeForm(Player $player): SimpleForm {
+        $form = new SimpleForm(function (Player $event, $data) {
+
             $player = $event->getPlayer();
 
             if ($data === null) {
                 return;
             }
+
             switch ($data) {
+
                 case 0:
-                    $player->transfer("45.134.8.234", 19133);
+                    $this->transferForm($player);
                     break;
-                case 1;
-                    $player->transfer("51.161.145.193", 19261);
+                case 1:
                     break;
-                case 2;
-                    $player->transfer("45.134.8.234", 19134);
+            }
+        });
+
+        $form->setTitle("§l§8TRANSFER FORM");
+        $form->setContent("Select a gamemode below:");
+        $form->addButton("Practice\nOnline: " . $this->core->getVityazManager()->getQueryUtil()->getTotalNetworkCount());
+
+        return $form;
+    }
+
+    public function transferForm(Player $player): SimpleForm {
+        $form = new SimpleForm(function (Player $event, $data) {
+
+            $player = $event->getPlayer();
+
+            if ($data === null) {
+                return;
+            }
+
+            switch ($data) {
+
+                case 0:
+                    $player->transfer(
+                        $this->core->getVityazManager()->getMasterConfig()->getNaHost(),
+                        $this->core->getVityazManager()->getMasterConfig()->getNaPort()
+                    );
+                    break;
+                case 1:
+                    $player->transfer(
+                        $this->core->getVityazManager()->getMasterConfig()->getEuHost(),
+                        $this->core->getVityazManager()->getMasterConfig()->getEuPort()
+                    );
+                    break;
+                case 2:
+                    $player->transfer(
+                        $this->core->getVityazManager()->getMasterConfig()->getAsHost(),
+                        $this->core->getVityazManager()->getMasterConfig()->getAsPort()
+                    );
                     break;
             }
         });
 
         $form->setTitle("§l§8TRANSFER FORM");
         $form->setContent("Transfer to a region below:");
-        $form->addButton("§8NA Practice\n§r§8" . $this->core->getVityazManager()->getQueryUtil()->getNaPracticeCount(false) . "/25");
-        $form->addButton("§8AS Practice\n§r§8" . $this->core->getVityazManager()->getQueryUtil()->getAsPracticeCount(false) . "/25");
-        $form->addButton("§8UHC Meetup\n" . $this->core->getVityazManager()->getQueryUtil()->getUhcPlayerCount(false) . "/25");
+
+        if ($this->core->getVityazManager()->getPlayerCountManager()->count["NA"] !== "Offline") {
+            $form->addButton("NA Practice\nOnline: " . $this->core->getVityazManager()->getPlayerCountManager()->count["NA"] . "/50");
+        } else {
+            $form->addButton("NA Practice\n" . $this->core->getVityazManager()->getPlayerCountManager()->count["NA"]);
+        }
+
+        if ($this->core->getVityazManager()->getPlayerCountManager()->count["EU"] !== "Offline") {
+            $form->addButton("EU Practice\nOnline: " . $this->core->getVityazManager()->getPlayerCountManager()->count["EU"] . "/50");
+        } else {
+            $form->addButton("EU Practice\n" . $this->core->getVityazManager()->getPlayerCountManager()->count["EU"]);
+        }
+
+        if ($this->core->getVityazManager()->getPlayerCountManager()->count["AS"] !== "Offline") {
+            $form->addButton("AS Practice\nOnline: " . $this->core->getVityazManager()->getPlayerCountManager()->count["AS"] . "/50");
+        } else {
+            $form->addButton("AS Practice\n" . $this->core->getVityazManager()->getPlayerCountManager()->count["AS"]);
+        }
         $player->sendForm($form);
         return $form;
     }
-
-
 }
